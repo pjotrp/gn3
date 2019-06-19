@@ -1,0 +1,20 @@
+Install racket, e.g.
+
+: guix package -i racket emacs-racket-mode
+
+Make sure to set the GUIX profile
+
+: ~/.guix-profile/etc/profile
+
+Dependencies
+
+: raco pkg install https://github.com/dmac/spin.git
+
+Run the server
+
+: racket rest_api.rkt
+
+Test output
+
+: curl http://localhost:8000/gene/aliases/BRCA2
+: { "BRCA2" : [ "BRCC2", "BROVCA2", ... ] }
