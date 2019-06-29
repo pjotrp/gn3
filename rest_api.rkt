@@ -33,9 +33,11 @@ curl "http://localhost:8000/wikidata" returns
      ))
 
 (get "/"
-     (lambda () "Hello!"))
+     (lambda () "[ \"Hello GeneNetwork3!\"  ]"))
 
 (get "/gene/aliases/:name" (lambda (req)
                              (string-append "[\"" (params req 'name) "\"]")))
 
+
+(display "Listening on port 8000:\n    curl http://localhost:8000/gene/aliases/BRCA2\n")
 (run)
