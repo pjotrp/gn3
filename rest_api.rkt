@@ -10,16 +10,117 @@
                        get-pure-port port->string)
        ))
 
-(define (sparql_homologeneid gene_name)
-  @string-append{
-A wonderful
-multiline string
-that goes on
-seemingly
-forever.})
-
 
 #|
+List BRCA2:
+
+SELECT ?b WHERE {wd:Q17853272 rdfs:label ?b . }
+
+List BRCA2 from label
+
+SELECT ?geneid ?p ?label
+WHERE {
+wd:Q17853272 rdfs:label ?label .
+?geneid wdt:P31 wd:Q7187 .
+?geneid rdfs:label ?label .
+filter(?label="BRCA2"@en)
+} limit 100
+
+Find orthologs
+
+  SELECT ?geneid ?s ?p
+  WHERE {
+    ?geneid wdt:P31 wd:Q7187 .
+    ?s ps:P684 ?geneid
+  } LIMIT 100
+
+
+SELECT ?geneid ?label2
+WHERE {
+  SELECT ?geneid ?label2
+  WHERE {
+    ?geneid wdt:P31 wd:Q7187 .
+     ?s ps:P702 ?geneid
+    {
+       select ?label where {
+       ?geneid rdfs:label ?label .
+       } limit 100
+    }
+    ?geneid rdfs:label ?label2 .
+    filter (?label2 = "BRCA1"@en) .
+  } limit 100
+  # filter (?label2 == "BRCA1"@en) .
+}
+
+Finds the gene but is slow
+
+  SELECT ?geneid ?label
+  WHERE {
+    ?geneid wdt:P31 wd:Q7187 .
+    ?s ps:P702 ?geneid .
+    ?geneid rdfs:label ?label .
+    filter (?label = "BRCA1"@en) .
+  } limit 100
+
+
+  SELECT ?geneid ?label
+  WHERE {
+    ?geneid wdt:P31 wd:Q7187 .
+    ?s ps:P702 ?geneid .
+    {
+      select ?label
+      where {
+        ?geneid rdfs:label ?label .
+        filter (?label = "BRCA1"@en) .
+      } limit 10
+    }
+    # filter (contains(?label,"BRCA1"@en)) .
+  } limit 100
+
+
+  SELECT DISTINCT ?geneid ?label
+  WHERE {
+    {
+      select DISTINCT ?geneid ?label
+      where {
+        hint:Query hint:optimizer "None" .
+        ?geneid wdt:P31 wd:Q7187 .
+        ?s ps:P702 ?geneid .
+        ?geneid rdfs:label ?label .
+        FILTER (langMatches( lang(?label), "EN" ) )
+      }
+    }
+    # filter (contains(?label,"BRCA2"@en)) .
+    filter (?label = "BRCA2"@en) .
+
+  } limit 100
+
+This fetches all 900K en entries in 30 seconds (not too bad!)
+
+  SELECT DISTINCT ?geneid ?label
+  WHERE {
+        hint:Query hint:optimizer "None" .
+        ?geneid wdt:P31 wd:Q7187 .
+        ?s ps:P702 ?geneid .
+        ?geneid rdfs:label ?label .
+        FILTER (langMatches( lang(?label), "EN" ) )
+      }
+
+We can do that once a day. Any better idea?
+
+This is 22s.
+
+  SELECT DISTINCT ?geneid ?label
+  WHERE {
+        # hint:Query hint:optimizer "None" .
+        ?geneid wdt:P31 wd:Q7187 .
+        ?s ps:P702 ?geneid .
+        ?geneid rdfs:label ?label .
+        FILTER (langMatches( lang(?label), "EN" ) && ?label = "BRCA2"@en)
+      }
+
+
+
 curl "http://localhost:8000/wikidata" returns
 <?xml version='1.0' encoding='UTF-8'?>
 <sparql xmlns='http://www.w3.org/2005/sparql-results#'>
