@@ -119,6 +119,17 @@ This is 22s.
         FILTER (langMatches( lang(?label), "EN" ) && ?label = "BRCA2"@en)
       }
 
+This one is instant
+
+  SELECT DISTINCT ?geneid ?label
+  WHERE {
+        # hint:Query hint:optimizer "None" .
+        ?geneid wdt:P31 wd:Q7187 .
+        ?s ps:P702 ?geneid .
+        ?geneid rdfs:label "BRCA1"@en .
+        # FILTER (langMatches( lang(?label), "EN" ) && ?label = "BRCA2"@en)
+      }
+
 
 
 curl "http://localhost:8000/wikidata" returns
