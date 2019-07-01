@@ -24,6 +24,18 @@
 (define header 
   '("Accept: application/json"))
 
+(define (sparql_wikidata_id gene_name)
+  @string-append{
+ SELECT DISTINCT ?geneid ?label
+ WHERE {
+  # hint:Query hint:optimizer "None" .
+  ?geneid wdt:P31 wd:Q7187 .
+  ?s ps:P702 ?geneid .
+  ?geneid rdfs:label "BRCA1"@"@"en .
+ }
+}
+  )
+                 
 (define sparql_homologene_id
   @string-append{
  SELECT ?homologeneID
@@ -48,8 +60,8 @@
                   header
                   ))
 
-(define wikidata-string
-  (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode sparql_homologene_id)))
+(define (wikidata-string query)
+  (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
                   get-pure-port
                   port->string
                   header
@@ -61,9 +73,9 @@
  "tests"
  (display "Running tests...")
  (display sparql_homologene_id)
- (display wikidata-string)
+ (display (wikidata-string (sparql_wikidata_id "BRCA2")))
+          ; (check-equal? (fetch "http://localhost:8000/") '("Hello GeneNetwork3!"))
+          ; (check-equal? (fetch "http://localhost:8000/gene/aliases/BRCA2") '("BRCA2"))
+          ; (display (fetch-string "http://localhost:8000/wikidata") )
+          )
  
- ; (check-equal? (fetch "http://localhost:8000/") '("Hello GeneNetwork3!"))
- ; (check-equal? (fetch "http://localhost:8000/gene/aliases/BRCA2") '("BRCA2"))
- ; (display (fetch-string "http://localhost:8000/wikidata") )
- )
