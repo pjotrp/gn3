@@ -38,12 +38,23 @@
                  
 (define (sparql_homologene_id wikidata_id)
   @string-append{
- SELECT ?homologeneID
+ SELECT ?homologene_id
  WHERE
  {
-  <@~a{@|wikidata_id|}> wdt:P593 ?homologeneID .
+  <@~a{@|wikidata_id|}> wdt:P593 ?homologene_id .
  } 
   }
+)
+
+(define (sparql_gene_alias wikidata_id)
+  @string-append{
+SELECT DISTINCT ?name ?alias
+WHERE
+{
+    <@~a{@|wikidata_id|}> rdfs:label ?name ;
+                         skos:altLabel ?alias .
+   FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
+}}
 )
 
 (define (wikidata-json query)
@@ -62,10 +73,9 @@
                   header
                   ))
 
-(define (wikidata-values json)
- 
+(define (wikidata-values json fieldname) 
   (map (lambda (wikidata_id)
-         (hash-ref (hash-ref wikidata_id 'wikidata_id) 'value))
+         (hash-ref (hash-ref wikidata_id fieldname) 'value))
      (hash-ref (hash-ref json 'results) 'bindings))
        )
   
@@ -80,12 +90,13 @@
  (display (sparql_homologene_id "http://www.wikidata.org/entity/Q17853272"))
  (let ([json (wikidata-json (sparql_wikidata_id "BRCA2"))])
    (display json)
-   (let ([values (wikidata-values json)])
+   (let ([values (wikidata-values json 'wikidata_id)])
      (display values)
      (writeln "---")
-     (map (lambda (value)
-            (wikidata-string (sparql_homologene_id value)))
-            values))
+     ; (display (wikidata-string (sparql_homologene_id "http://www.wikidata.org/entity/Q17853272")) 'homologene_id)
+     (display (map (lambda (value)
+            (wikidata-values (wikidata-json (sparql_homologene_id value)) 'homologene_id))
+            values)))
    
    )
  ; (display (wikidata-json (sparql_wikidata_id "BRCA2")))

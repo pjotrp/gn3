@@ -131,6 +131,31 @@ This one is instant
       }
 
 
+SELECT ?geneLabel (GROUP_CONCAT(DISTINCT ?geneAltLabel; separator="; ") AS ?geneAltLabel)
+WHERE
+{
+    # https://www.wikidata.org/wiki/Q18247422 is Add1 in mouse
+    wd:Q18247422 rdfs:label ?geneLabel ;
+                 skos:altLabel ?geneAltLabel .
+
+    FILTER(LANG(?geneLabel) = "en" &&
+           LANG(?geneAltLabel) = "en").
+}
+GROUP BY ?geneLabel
+
+Simpler version
+
+
+
+SELECT DISTINCT ?name ?alias
+WHERE
+{
+    <http://www.wikidata.org/entity/Q17853272> rdfs:label ?name ;
+                                               skos:altLabel ?alias .
+
+   FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
+}
+
 
 curl "http://localhost:8000/wikidata" returns
 <?xml version='1.0' encoding='UTF-8'?>
