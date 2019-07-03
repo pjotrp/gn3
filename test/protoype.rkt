@@ -48,7 +48,7 @@
 
 (define (sparql_gene_alias wikidata_id)
   @string-append{
-SELECT DISTINCT ?name ?alias
+SELECT DISTINCT ?alias
 WHERE
 {
     <@~a{@|wikidata_id|}> rdfs:label ?name ;
@@ -79,6 +79,11 @@ WHERE
      (hash-ref (hash-ref json 'results) 'bindings))
        )
   
+(define (gene-aliases wikidata_id)
+         ; (wikidata-values (wikidata-json (sparql_gene_alias wikidata_id))) 'alias)
+  
+  (wikidata-values (wikidata-json (sparql_gene_alias wikidata_id)) 'alias))
+  
 
 (require rackunit)
 
@@ -88,6 +93,7 @@ WHERE
  (display sparql_homologene_id)
  (display (wikidata-string (sparql_wikidata_id "BRCA2")))
  (display (sparql_homologene_id "http://www.wikidata.org/entity/Q17853272"))
+ 
  (let ([json (wikidata-json (sparql_wikidata_id "BRCA2"))])
    (display json)
    (let ([values (wikidata-values json 'wikidata_id)])
@@ -97,7 +103,8 @@ WHERE
      (display (map (lambda (value)
             (wikidata-values (wikidata-json (sparql_homologene_id value)) 'homologene_id))
             values)))
-   
+    (writeln (gene-aliases "http://www.wikidata.org/entity/Q17853272"))
+
    )
  ; (display (wikidata-json (sparql_wikidata_id "BRCA2")))
  
