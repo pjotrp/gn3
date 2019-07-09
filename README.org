@@ -12,7 +12,7 @@ Dependencies
 
 Run the server
 
-: racket rest_api.rkt
+: racket rest-api/rest-api.rkt
 
 Test output
 
