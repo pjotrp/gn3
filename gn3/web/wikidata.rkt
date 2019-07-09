@@ -2,6 +2,8 @@
 
 ;; Wikidata fetchers
 
+(provide wikidata-id)
+
 (require json)
 (require net/url)
 (require net/uri-codec)
@@ -14,14 +16,17 @@
 (define wdt-instance-of "wdt:P31")
 (define wdt-in-taxon "wdt:P703")
 (define wd-human "wd:Q15978631")
+(define wd-mouse "wd:Q83310")
+(define wd-rat "wd:Q184224")
 (define wd-gene "wd:Q7187")
 
 (define (sparql_wikidata_id gene_name)
   @string-append{
      SELECT DISTINCT ?wikidata_id
             WHERE {
-              ?wikidata_id @wdt-instance-of @wd-gene .
-              ?wikidata_id @wdt-in-taxon @wd-human .
+              ?wikidata_id @wdt-instance-of @wd-gene ;
+                           @wdt-in-taxon ?species .
+              VALUES (?species) { (@wd-human) (@wd-mouse) (@wd-rat) } .
               ?wikidata_id rdfs:label "@gene_name"@"@"en .
               }
             })
@@ -49,7 +54,12 @@
   )
 
 
-(define wikidata_id
-  (let ([json (wikidata-json (sparql_wikidata_id "BRCA2"))])
+;; Get the wikidata_id from a gene Name
+(define wikidata-id
+  (let ([json (wikidata-json (sparql_wikidata_id "Shh"))])
     (let ([values (wikidata-values json 'wikidata_id)])
-      (display values))))
+      (display values)
+      values
+      )))
+
+;    (writeln (gene-aliases "http://www.wikidata.org/entity/Q17853272"))
