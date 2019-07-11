@@ -9,12 +9,15 @@
 (get "/"
      (lambda () "[ \"Hello GeneNetwork3!\"  ]"))
 
-(get "/wikidata/ids/:name" (lambda (req)
-                            (wikidata-id (params req 'name))))
+(get "/wikidata/ids/:genename"
+     (lambda (req)
+       ((jsexp->string (wikidata-id (params req 'genename))))))
 
-(get "/gene/aliases/:name" (lambda (req)
-                             (string-append "[\"" (params req 'name) "\"]")))
+(get "/gene/aliases/:name"
+     (lambda (req)
+       (string-append "[\"" (params req 'name) "\"]")))
 
-;; Starting the web server on port 8000
+;; Start up web server
+
 (display "Listening on port 8000:\n    curl http://localhost:8000/gene/aliases/BRCA2\n")
 (run)

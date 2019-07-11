@@ -2,7 +2,7 @@
 
 ;; Wikidata fetchers
 
-(provide wikidata-id)
+(provide wikidata-ids)
 
 (require json)
 (require net/url)
@@ -53,13 +53,10 @@
        (hash-ref (hash-ref json 'results) 'bindings))
   )
 
-
-;; Get the wikidata_id from a gene Name
-(define wikidata-id
-  (let ([json (wikidata-json (sparql_wikidata_id "Shh"))])
+;; Get the wikidata_ids from a gene Name
+(define (wikidata-ids gene-name)
+  (let ([json (wikidata-json (sparql_wikidata_id gene-name))])
     (let ([values (wikidata-values json 'wikidata_id)])
       (display values)
       values
       )))
-
-;    (writeln (gene-aliases "http://www.wikidata.org/entity/Q17853272"))
