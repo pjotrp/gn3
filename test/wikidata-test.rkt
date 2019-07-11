@@ -31,6 +31,7 @@
                  "BRCC2"
                  "GLM3"
                  "PNCA2"
-                 "XRCC11")
-               )
+                 "XRCC11"))
+ (check-equal? (gene-aliases "SHH")
+               '("TPT" "HLP3" "HHG1" "HPE3" "MCOPCB5" "ShhNC" "SMMCI" "TPTPS"))
  )

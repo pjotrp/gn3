@@ -73,15 +73,16 @@ WHERE
       )))
 
 ;; Get gene aliases for a wikidata_id
-(define (wikidata-gene-aliases wikidata_id)
+(define (wikidata-gene-aliases wikidata-id)
   (let ([aliases
          (wikidata-values (wikidata-json (sparql_gene_alias
-                                          wikidata_id)) 'alias)])
+                                          wikidata-id)) 'alias)])
     (filter-map (lambda (a) (and (not (string-contains? a " ")) a))
                 aliases)))
 
 ;; Get gene aliases for a gene name
 (define (gene-aliases gene-name)
-  (let ([ids (wikidata-ids gene-name)]
-        ids
-  )))
+  (let ([ids (wikidata-ids gene-name)])
+     (flatten (map (lambda (id) (wikidata-gene-aliases id) )
+         ids)))
+  )
