@@ -2,7 +2,7 @@
 
 ;; Wikidata fetchers
 
-(provide wikidata-ids)
+(provide wikidata-ids wikidata-gene-aliases gene-aliases)
 
 (require json)
 (require net/url)
@@ -31,6 +31,17 @@
               }
             })
 
+(define (sparql_gene_alias wikidata_id)
+  @string-append{
+SELECT DISTINCT ?alias
+WHERE
+{
+    <@~a{@|wikidata_id|}> rdfs:label ?name ;
+                         skos:altLabel ?alias .
+   FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
+}}
+)
+
 (define (wikidata-json query)
   (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
                   get-pure-port
@@ -57,6 +68,19 @@
 (define (wikidata-ids gene-name)
   (let ([json (wikidata-json (sparql_wikidata_id gene-name))])
     (let ([values (wikidata-values json 'wikidata_id)])
-      (display values)
+      ; (display values)
       values
       )))
+
+;; Get gene aliases for a wikidata_id
+(define (wikidata-gene-aliases wikidata_id)
+  (let ([aliases
+         (wikidata-values (wikidata-json (sparql_gene_alias
+                                          wikidata_id)) 'alias)])
+    (filter-map (lambda (a) (and (not (string-contains? a " ")) a))
+                aliases)))
+
+;; Get gene aliases for a gene name
+(define (gene-aliases gene-name)
+  ""
+  )

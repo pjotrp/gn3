@@ -4,18 +4,22 @@
 
 (require (planet dmac/spin))
 (require net/url)
+(require json)
 (require "../../gn3/gn3/web/wikidata.rkt")
 
 (get "/"
      (lambda () "[ \"Hello GeneNetwork3!\"  ]"))
 
-(get "/wikidata/ids/:genename"
+;; Internal request for wikidata ids belonging to a gene name (Shh,
+;; BRCA2)
+(get "/internal/wikidata/ids/:genename"
      (lambda (req)
-       ((jsexp->string (wikidata-id (params req 'genename))))))
+       (jsexpr->string (wikidata-ids (params req 'genename)))))
 
+;; Get aliases for a gene name (can be Human, Rat, Mouse)
 (get "/gene/aliases/:name"
      (lambda (req)
-       (string-append "[\"" (params req 'name) "\"]")))
+       (jsexpr->string (gene-aliases (params req 'name)))))
 
 ;; Start up web server
 

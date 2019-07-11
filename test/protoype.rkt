@@ -46,22 +46,7 @@
   }
 )
 
-(define (sparql_gene_alias wikidata_id)
-  @string-append{
-SELECT DISTINCT ?alias
-WHERE
-{
-    <@~a{@|wikidata_id|}> rdfs:label ?name ;
-                         skos:altLabel ?alias .
-   FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
-}}
-)
 
-
-(define (gene-aliases wikidata_id)
-         ; (wikidata-values (wikidata-json (sparql_gene_alias wikidata_id))) 'alias)
-
-  (wikidata-values (wikidata-json (sparql_gene_alias wikidata_id)) 'alias))
 
 
 (require rackunit)
@@ -85,9 +70,3 @@ WHERE
     (writeln (gene-aliases "http://www.wikidata.org/entity/Q17853272"))
 
    )
- ; (display (wikidata-json (sparql_wikidata_id "BRCA2")))
-
-          ; (check-equal? (fetch "http://localhost:8000/") '("Hello GeneNetwork3!"))
-          ; (check-equal? (fetch "http://localhost:8000/gene/aliases/BRCA2") '("BRCA2"))
-          ; (display (fetch-string "http://localhost:8000/wikidata") )
-          )
