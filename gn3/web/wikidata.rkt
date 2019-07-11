@@ -82,5 +82,6 @@ WHERE
 
 ;; Get gene aliases for a gene name
 (define (gene-aliases gene-name)
-  ""
-  )
+  (let ([ids (wikidata-ids gene-name)]
+        ids
+  )))
