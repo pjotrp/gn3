@@ -20,6 +20,8 @@
 (define wd-rat "wd:Q184224")
 (define wd-gene "wd:Q7187")
 
+;; Create a SPARQL query for fetching wikidata ids for a (case
+;; sensitive) gene name (Human Mouse and Rat)
 (define (sparql_wikidata_id gene_name)
   @string-append{
      SELECT DISTINCT ?wikidata_id
@@ -31,17 +33,19 @@
               }
             })
 
+;; Create a SPARQL query for fetching aliases that go with a wikidata
+;; id
 (define (sparql_gene_alias wikidata_id)
   @string-append{
-SELECT DISTINCT ?alias
-WHERE
-{
-    <@~a{@|wikidata_id|}> rdfs:label ?name ;
-                         skos:altLabel ?alias .
-   FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
-}}
-)
+      SELECT DISTINCT ?alias
+             WHERE {
+                    <@~a{@|wikidata_id|}> rdfs:label ?name ;
+                        skos:altLabel ?alias .
+      FILTER(LANG(?name) = "en" && LANG(?alias) = "en").
+      }}
+  )
 
+;; Execute a Wikidata SPARQL query and return as JSON
 (define (wikidata-json query)
   (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
                   get-pure-port
@@ -50,7 +54,8 @@ WHERE
                     )
                   header
                   ))
-
+;; Execute a Wikidata SPARQL query and return as a string (mostly for
+;; debugging purposes)
 (define (wikidata-string query)
   (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
                   get-pure-port
@@ -58,6 +63,8 @@ WHERE
                   header
                   ))
 
+;; Get named values from a JSON record returned by a Wikidata SPARQL
+;; query
 (define (wikidata-values json fieldname)
   (map (lambda (wikidata_id)
          (hash-ref (hash-ref wikidata_id fieldname) 'value))
@@ -80,7 +87,7 @@ WHERE
     (filter-map (lambda (a) (and (not (string-contains? a " ")) a))
                 aliases)))
 
-;; Get gene aliases for a gene name
+;; Get gene aliases for a gene name (human, mouse and rat)
 (define (gene-aliases gene-name)
   (let ([ids (wikidata-ids gene-name)])
      (flatten (map (lambda (id) (wikidata-gene-aliases id) )
