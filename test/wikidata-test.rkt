@@ -40,4 +40,4 @@
                '("TPT" "HLP3" "HHG1" "HPE3" "MCOPCB5" "ShhNC" "SMMCI" "TPTPS"))
  (check-equal? (gene-aliases "Shh") ;; returns mouse and rat!
                '("Hx" "ShhNC" "9530036O11Rik" "Dsh" "Hhg1" "Hxl3" "M100081" "ShhNC")
- )
+ ))
