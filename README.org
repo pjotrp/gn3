@@ -2,13 +2,20 @@ Install racket, e.g.
 
 : guix package -i racket emacs-racket-mode
 
-Make sure to set the GUIX profile
+Make sure to set the correct GUIX profile where Racket was installed, e.g.
 
-: ~/.guix-profile/etc/profile
+: . ~/.guix-profile/etc/profile
+
+or
+
+: . ~/opt/racket/etc/profile
+
+(note the leading dot)
 
 Dependencies
 
 : raco pkg install https://github.com/dmac/spin.git
+: raco pkg install https://github.com/BourgondAries/memo.git
 
 Run the server
 
