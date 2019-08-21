@@ -4,6 +4,7 @@
 ;;
 ;; The end points use a simpile memoize routine which is reset by restarting the
 ;; process.
+;;
 
 (provide sparql_gene_alias wikidata-ids wikidata-gene-aliases gene-aliases)
 
@@ -78,6 +79,16 @@ SELECT DISTINCT ?alias
                     )
                   header
                   ))
+
+; (wikidata-xml (sparql_wikidata_id "Shh"))
+(define (wikidata-xml query)
+  (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
+                  get-pure-port
+                  port->string
+                  '("Accept: application/xml")
+                  ))
+
+
 ;; Execute a Wikidata SPARQL query and return as a string (mostly for
 ;; debugging purposes)
 (define (wikidata-string query)
