@@ -17,6 +17,10 @@ Dependencies
 : raco pkg install https://github.com/dmac/spin.git
 : raco pkg install https://github.com/BourgondAries/memo.git
 
+Run the tests with
+
+: racket test/wikidata-test.rkt
+
 Run the server
 
 : racket rest-api/rest-api.rkt

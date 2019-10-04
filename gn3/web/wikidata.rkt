@@ -70,7 +70,7 @@ SELECT DISTINCT ?alias
       }}
   )
 
-;; Execute a Wikidata SPARQL query and return as JSON
+;; Execute a Wikidata SPARQL query and return as JSON expression
 (define (wikidata-json query)
   (call/input-url (string->url (string-append "https://query.wikidata.org/sparql?query=" (uri-encode query)))
                   get-pure-port
