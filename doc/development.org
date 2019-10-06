@@ -1,8 +1,8 @@
 * GN3 is mostly Lisp code!
 
-You can use DrRacket.
+You can use DrRacket for development and debugging.
 
-Recommended are Emacs with
+Recommended are Emacs modules
 
 - [[https://www.emacswiki.org/emacs/RainbowDelimiters][Rainbow delimiters]] (color brackets)
 - Guile mode

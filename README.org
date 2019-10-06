@@ -1,3 +1,27 @@
+#+TITLE: GeneNetwork3 REST API
+#+AUTHOR: Pjotr Prins
+
+* Table of Contents                                                     :TOC:
+ - [[#introduction][Introduction]]
+ - [[#install][Install]]
+ - [[#test][Test]]
+ - [[#run][Run]]
+
+* Introduction
+
+At this point GeneNetwork3 (GN3) is a REST API that provides extra end
+points in addition to the ones in GN2. The main distinction is that
+GN3 is written in Racket and GN2 in Python ;).
+
+At this point the API caches remote queries (for example to wikidata).
+To empty the cache simply restart the server.
+
+Enjoy,
+
+Pjotr Prins
+
+* Install
+
 Install racket, e.g.
 
 : guix package -i racket emacs-racket-mode
@@ -16,6 +40,14 @@ Dependencies
 
 : raco pkg install https://github.com/dmac/spin.git
 : raco pkg install https://github.com/BourgondAries/memo.git
+
+* Test
+
+Run the tests with
+
+: racket test/wikidata-test.rkt
+
+* Run
 
 Run the server
 
