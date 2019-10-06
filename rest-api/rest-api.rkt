@@ -25,7 +25,7 @@
 ;; be Human, Rat, Mouse).
 (get "/gene/aliases2/:names"
      (lambda (req)
-       (jsexpr->string (gene-aliases2 (string-split (params req 'names) ","))))
+       (jsexpr->string (gene-aliases2 (string-split (params req 'names) ",")))))
 
 ;; Start up web server
 
