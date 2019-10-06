@@ -23,7 +23,7 @@
 
 ;; Start up web server
 
-(define port 8001)
+(define port 8000)
 (define port-str (number->string port))
 (display (string-append "Listening on port " port-str ":\n    curl http://localhost:" port-str "/gene/aliases/BRCA2\n"))
 (run #:port port)
