@@ -1,0 +1,12 @@
+[Unit]
+Description=Run GN3 REST API
+
+[Service]
+ExecStart=/home/gn3/opt/racket/bin/racket rest-api/rest-api.rkt
+Environment="PATH=/home/gn3/opt/racket/bin"
+User=gn3
+WorkingDirectory=/home/gn3/production/gn3
+
+[Install]
+WantedBy=multi-user.target
+
