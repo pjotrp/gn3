@@ -57,3 +57,9 @@ Test output
 
 : curl http://localhost:8000/gene/aliases/BRCA2
 : { "BRCA2" : [ "BRCC2", "BROVCA2", ... ] }
+
+* Web service
+
+The current webservice is running on 
+
+: curl http://gn2.genenetwork.org/gn3/gene/aliases2/Shh,Brca2
