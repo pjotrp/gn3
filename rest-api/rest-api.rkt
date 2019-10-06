@@ -21,6 +21,12 @@
      (lambda (req)
        (jsexpr->string (gene-aliases (params req 'name)))))
 
+;; Get expanded aliases for a comma separated list of gene names (can
+;; be Human, Rat, Mouse).
+(get "/gene/aliases2/:names"
+     (lambda (req)
+       (jsexpr->string (gene-aliases2 (string-split (params req 'names) ","))))
+
 ;; Start up web server
 
 (define port 8001)

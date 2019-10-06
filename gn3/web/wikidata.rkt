@@ -6,7 +6,11 @@
 ;; process.
 ;;
 
-(provide sparql_gene_alias wikidata-ids wikidata-gene-aliases gene-aliases)
+(provide sparql_gene_alias
+         wikidata-ids
+         wikidata-gene-aliases
+         gene-aliases
+         gene-aliases2)
 
 (require json)
 (require net/url)
@@ -124,8 +128,17 @@ SELECT DISTINCT ?alias
                 aliases)))
 
 ;; Get gene aliases for a gene name (human, mouse and rat)
+;; This function is called by "/gene/aliases/:name"
 (define/memoize (gene-aliases gene-name)
   (let ([ids (wikidata-ids gene-name)])
      (flatten (map (lambda (id) (wikidata-gene-aliases id) )
          ids)))
+  )
+
+;; Get gene expanded aliases for a list of gene names (human, mouse
+;; and rat) This function is called by "/gene/aliases/:names"
+(define (gene-aliases2 gene-names)
+  (map (lambda (gene-name)
+         (list gene-name (gene-aliases gene-name)))
+         gene-names)
   )
