@@ -22,7 +22,8 @@
        (jsexpr->string (gene-aliases (params req 'name)))))
 
 ;; Get expanded aliases for a comma separated list of gene names (can
-;; be Human, Rat, Mouse).
+;; be Human, Rat, Mouse). Note that is is 'aliases2' instead of
+;; 'aliases'. The 2 refers to the tuple result of gene name and list.
 (get "/gene/aliases2/:names"
      (lambda (req)
        (jsexpr->string (gene-aliases2 (string-split (params req 'names) ",")))))
