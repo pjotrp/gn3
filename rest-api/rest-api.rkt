@@ -16,7 +16,7 @@
      (lambda (req)
        (jsexpr->string (wikidata-ids (params req 'genename)))))
 
-;; Get aliases for a gene name (can be Human, Rat, Mouse)
+;; Get aliases for a gene name (can be Human, Rat, Mouse).
 (get "/gene/aliases/:name"
      (lambda (req)
        (jsexpr->string (gene-aliases (params req 'name)))))
